@@ -263,6 +263,9 @@
             "enableScd": {
               "type": "boolean"
             },
+            "enableSurveillance": {
+              "type": "boolean"
+            },
             "enableScdGlobalLock": {
               "type": "boolean"
             },
@@ -305,7 +308,7 @@
                     }
                   }
                 },
-                "scd": {
+                "rid": {
                   "description": "RID Related configuration",
                   "type": "object",
                   "properties": {
@@ -321,6 +324,29 @@
                       "description": "Go duration format (https://pkg.go.dev/time#ParseDuration)"
                     },
                     "ISAs": {
+                      "type": "boolean"
+                    },
+                    "subscriptions": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "surveillance": {
+                  "description": "Surveillance Related configuration",
+                  "type": "object",
+                  "properties": {
+                    "enableCron": {
+                      "type": "boolean"
+                    },
+                    "schedule": {
+                      "type": "string",
+                      "description": "In cron format (https://crontab.guru/)"
+                    },
+                    "ttl": {
+                      "type": "string",
+                      "description": "Go duration format (https://pkg.go.dev/time#ParseDuration)"
+                    },
+                    "TSAs": {
                       "type": "boolean"
                     },
                     "subscriptions": {

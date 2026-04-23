@@ -11,6 +11,7 @@ local metadata = metadataBase {
   clusterName: 'VAR_CLUSTER_CONTEXT',
   single_cluster: false,
   enableScd: false, // <-- This boolean value is VAR_ENABLE_SCD
+  enableSurveillance: false, // <-- This boolean value is VAR_ENABLE_SURVEILLANCE
   enableScdGlobalLock: false, // <-- This boolean value is VAR_ENABLE_SCD_GLOBAL_LOCK
   datastore: 'VAR_DATASTORE',
   locality: 'VAR_LOCALITY',
@@ -59,6 +60,7 @@ local metadata = metadataBase {
     enable: false, // <-- this boolean value is VAR_ENABLE_SCHEMA_MANAGER
     image: 'VAR_DOCKER_IMAGE_NAME',
     desired_rid_db_version: '4.0.0',
+    desired_surveillance_db_version: '1.0.0',
     desired_scd_db_version: '3.3.0',
     desired_aux_db_version: '1.1.0',
   },
@@ -74,11 +76,18 @@ local metadata = metadataBase {
       subscriptions: true, // <-- this boolean value is VAR_EVICT_SCD_ENABLE_SUBSCRIPTIONS
     },
     rid+: {
-      enable_cron: true, // <-- this boolean value is VAR_EVICT_ENABLE_SCD_CRON
+      enable_cron: true, // <-- this boolean value is VAR_EVICT_ENABLE_RID_CRON
       schedule: "VAR_EVICT_RID_SCHEDULE",
       ttl: "VAR_EVICT_RID_TTL",
       ISAs: true, // <-- this boolean value is VAR_EVICT_RID_ENABLE_ISAS
       subscriptions: true, // <-- this boolean value is VAR_EVICT_RID_ENABLE_SUBSCRIPTIONS
+    },
+    surveillance+: {
+      enable_cron: false, // <-- this boolean value is VAR_EVICT_ENABLE_SURVEILLANCE_CRON
+      schedule: "VAR_EVICT_SURVEILLANCE_SCHEDULE",
+      ttl: "VAR_EVICT_SURVEILLANCE_TTL",
+      TSAs: true, // <-- this boolean value is VAR_EVICT_SURVEILLANCE_ENABLE_TSAS
+      subscriptions: true, // <-- this boolean value is VAR_EVICT_SURVEILLANCE_ENABLE_SUBSCRIPTIONS
     },
   },
 //  image_pull_secret: 'VAR_DOCKER_IMAGE_PULL_SECRET'

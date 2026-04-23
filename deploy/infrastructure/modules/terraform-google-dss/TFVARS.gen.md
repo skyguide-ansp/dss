@@ -127,6 +127,12 @@ Use <code>latest</code> to use the latest schema version.</p>
 <p>Example: <code>3.1.0</code></p>
 <br/>Default value: <code>"latest"</code></td>
             </tr><tr>
+                <td>desired_surveillance_db_version (<code>string</code>)</td>
+                <td><p>Desired Surveillance DB schema version.
+Use <code>latest</code> to use the latest schema version.</p>
+<p>Example: <code>1.0.0</code></p>
+<br/>Default value: <code>"latest"</code></td>
+            </tr><tr>
                 <td>enable_monitoring (<code>bool</code>)</td>
                 <td><p>Set to true to enable monitoring stack with prometheus / grafana.</p>
 <p>Example: <code>true</code></p>
@@ -139,6 +145,10 @@ Use <code>latest</code> to use the latest schema version.</p>
                 <td>enable_scd_global_lock (<code>bool</code>)</td>
                 <td><p>Set this boolean true to enable experimental global lock when working with SCD subscriptions. Reduce global throughput but improve throughput with lot of subscriptions in the same areas. Must be enabled on all instances part of the pool.</p>
 <br/>Default value: <code>false</code></td>
+            </tr><tr>
+                <td>enable_surveillance (<code>bool</code>)</td>
+                <td><p>Set this boolean true to enable surveillance functionality</p>
+<br/>Default value: <code>true</code></td>
             </tr><tr>
                 <td>evict_enable_rid_cron (<code>bool</code>)</td>
                 <td><p>Set this to true to enable the cron job that automatically cleanup RID entries.</p>
@@ -179,6 +189,22 @@ Use <code>latest</code> to use the latest schema version.</p>
                 <td>evict_scd_ttl (<code>string</code>)</td>
                 <td><p>How long expired SCD items should stay before being automatically removed; expressed in Go duration format (https://pkg.go.dev/time#ParseDuration).</p>
 <br/>Default value: <code>"2688h"</code></td>
+            </tr><tr>
+                <td>evict_surveillance_schedule (<code>string</code>)</td>
+                <td><p>When the surveillance cleanup job shall be performed; expressed in cron format (https://crontab.guru/).</p>
+<br/>Default value: <code>"*/30 * * * *"</code></td>
+            </tr><tr>
+                <td>evict_surveillance_subscriptions (<code>bool</code>)</td>
+                <td><p>Set this to true to enable cleanup of surveillance subscriptions.</p>
+<br/>Default value: <code>true</code></td>
+            </tr><tr>
+                <td>evict_surveillance_tsas (<code>bool</code>)</td>
+                <td><p>Set this to true to enable cleanup of surveillance TSAs.</p>
+<br/>Default value: <code>true</code></td>
+            </tr><tr>
+                <td>evict_surveillance_ttl (<code>string</code>)</td>
+                <td><p>How long expired surveillance items should stay before being automatically removed; expressed in Go duration format (https://pkg.go.dev/time#ParseDuration).</p>
+<br/>Default value: <code>"30m"</code></td>
             </tr><tr>
                 <td>google_dns_managed_zone_name (<code>string</code>)</td>
                 <td><p>GCP DNS zone name to automatically manage DNS entries.</p>

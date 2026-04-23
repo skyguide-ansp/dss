@@ -295,6 +295,13 @@ variable "enable_scd" {
   default     = true
 }
 
+variable "enable_surveillance" {
+  type        = bool
+  description = "Set this boolean true to enable surveillance functionality"
+  default     = true
+}
+
+
 variable "enable_scd_global_lock" {
   type        = bool
   description = "Set this boolean true to enable experimental global lock when working with SCD subscriptions. Reduce global throughput but improve throughput with lot of subscriptions in the same areas. Must be enabled on all instances part of the pool."
@@ -327,6 +334,19 @@ variable "desired_rid_db_version" {
 
   default = "latest"
 }
+
+variable "desired_surveillance_db_version" {
+  type        = string
+  description = <<-EOT
+  Desired Surveillance DB schema version.
+  Use `latest` to use the latest schema version.
+
+  Example: `1.0.0`
+  EOT
+
+  default = "latest"
+}
+
 
 variable "desired_scd_db_version" {
   type        = string
@@ -584,6 +604,50 @@ variable "evict_rid_subscriptions" {
   type        = bool
   description = <<-EOT
   Set this to true to enable cleanup of RID subscriptions.
+
+  EOT
+
+  default = true
+}
+
+
+variable "evict_surveillance_schedule" {
+  type        = string
+  description = <<-EOT
+  When the surveillance cleanup job shall be performed; expressed in cron format (https://crontab.guru/).
+
+  EOT
+
+  default = "*/30 * * * *"
+}
+
+
+variable "evict_surveillance_ttl" {
+  type        = string
+  description = <<-EOT
+  How long expired surveillance items should stay before being automatically removed; expressed in Go duration format (https://pkg.go.dev/time#ParseDuration).
+
+  EOT
+
+  default = "30m"
+}
+
+
+variable "evict_surveillance_tsas" {
+  type        = bool
+  description = <<-EOT
+  Set this to true to enable cleanup of surveillance TSAs.
+
+  EOT
+
+  default = true
+}
+
+
+variable "evict_surveillance_subscriptions" {
+  type        = bool
+  description = <<-EOT
+  Set this to true to enable cleanup of surveillance subscriptions.
 
   EOT
 

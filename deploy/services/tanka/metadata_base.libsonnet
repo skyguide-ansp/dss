@@ -8,6 +8,7 @@
   // This disables inter cluster crdb<->crdb access when set to true.
   single_cluster: false,
   enableScd: false,
+  enableSurveillance: false,
   enableScdGlobalLock: false,
   datastore: 'cockroachdb',
   locality: error 'must supply locality',
@@ -88,6 +89,7 @@
     enable: false, // NB: Automatically enabled if should_init is set to true.
     image: error 'must specify image',
     desired_rid_db_version: '4.0.0',
+    desired_surveillance_db_version: '1.0.0',
     desired_scd_db_version: '3.3.0',
     desired_aux_db_version: '1.1.0',
   },
@@ -105,6 +107,9 @@
       ttl: "30m",
       ISAs: true,
       subscriptions: true,
+    },
+    surveillance: {
+      enable_cron: false,
     },
   },
   image_pull_secret: '',

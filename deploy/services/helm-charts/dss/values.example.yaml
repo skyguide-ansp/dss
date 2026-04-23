@@ -12,8 +12,14 @@ dss:
     hostname: dss.example.com
     publicEndpoint: https://dss.example.com
     enableScd: true
+    enableSurveillance: true
     enableScdGlobalLock: false
     locality: zone=interuss-example-google-ew1
+    evict:
+      scd:
+        enableCron: true
+      surveillance:
+        enableCron: true
 
 cockroachdb:
   enabled: true

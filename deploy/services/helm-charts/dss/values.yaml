@@ -3,6 +3,7 @@
 dss:
   conf:
     enableScd: true
+    enableSurveillance: false
     evict:
       scd:
           enableCron: false
@@ -15,6 +16,12 @@ dss:
           schedule: "*/30 * * * *"
           ttl: 30m
           ISAs: true
+          subscriptions: true
+      surveillance:
+          enableCron: false
+          schedule: "*/30 * * * *"
+          ttl: 30m
+          TSAs: true
           subscriptions: true
 
 

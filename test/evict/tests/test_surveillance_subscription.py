@@ -7,15 +7,15 @@ from evict_helper import EvictHelper
 from query_helper import QueryHelper
 
 
-def test_scd_subscription(qh: QueryHelper, eh: EvictHelper):
-    logger = logging.getLogger("test_scd_subscription")
+def test_surveillance_subscription(qh: QueryHelper, eh: EvictHelper):
+    logger = logging.getLogger("test_surveillance_subscription")
 
-    logger.info("📋 SCD Subscriptions test")
+    logger.info("📋 Surveillance Subscriptions test")
 
     t = datetime.now(UTC) + timedelta(seconds=1)
 
     logger.debug("Creating test subscription")
-    sub = qh.create_scd_subscription(t)
+    sub = qh.create_surveillance_subscription(t)
 
     if not sub:
         logger.error("❌ Unable to create subscription")
@@ -24,15 +24,15 @@ def test_scd_subscription(qh: QueryHelper, eh: EvictHelper):
     sub_id: str = str(sub["subscription"]["id"])
 
     logger.debug("Check that subscription exists")
-    if not qh.get_scd_subscription(sub_id):
+    if not qh.get_surveillance_subscription(sub_id):
         logger.error("❌ Unable to retrieve subscription after creation")
         sys.exit(1)
 
     logger.debug("Evicting subscriptions older than 1s")
-    eh.evict_scd_subscriptions("1s", delete=True)
+    eh.evict_surveillance_subscriptions("1s", delete=True)
 
     logger.debug("Check that subscription still exists")
-    if not qh.get_scd_subscription(sub_id):
+    if not qh.get_surveillance_subscription(sub_id):
         logger.error("❌ Test subscription shall still be present since not expired")
         sys.exit(1)
 
@@ -41,31 +41,37 @@ def test_scd_subscription(qh: QueryHelper, eh: EvictHelper):
     time.sleep(3)
 
     logger.debug("Evicting subscriptions older than 1s in dry mode")
-    eh.evict_scd_subscriptions("1s", delete=False)
+    eh.evict_surveillance_subscriptions("1s", delete=False)
 
     logger.debug("Check that subscription still exists")
-    if not qh.get_scd_subscription(sub_id):
+    if not qh.get_surveillance_subscription(sub_id):
         logger.error(
             "❌ Test subscription shall still be present since delete was set to false"
         )
         sys.exit(1)
 
-    logger.debug("Evicting operational intents older than 1s")
-    eh.evict_scd_operational_intents("1s", delete=True)
+    logger.debug("Evicting TSAs older than 1s")
+    eh.evict_surveillance_TSAs("1s", delete=True)
 
     logger.debug("Check that subscription still exists")
-    if not qh.get_scd_subscription(sub_id):
+    if not qh.get_surveillance_subscription(sub_id):
+        logger.error("❌ Test subscription shall still be present since we evicted ISA")
+        sys.exit(1)
+
+    logger.debug("Evicting subscriptions older than 1s on another locality")
+    eh.evict_surveillance_subscriptions("1s", delete=True, locality="somethingelse")
+    if not qh.get_surveillance_subscription(sub_id):
         logger.error(
-            "❌ Test subscription shall still be present since we evicted operational intents"
+            "❌ Test subscription shall still be present since we used another locality"
         )
         sys.exit(1)
 
     logger.debug("Evicting subscriptions older than 1s")
-    eh.evict_scd_subscriptions("1s", delete=True)
+    eh.evict_surveillance_subscriptions("1s", delete=True)
 
     logger.debug("Check that subscription has been deleted")
-    if qh.get_scd_subscription(sub_id):
+    if qh.get_surveillance_subscription(sub_id):
         logger.error("❌ Test subscription shall be deleted by evict")
         sys.exit(1)
 
-    logger.info("✅ SCD Subscriptions test successful :)")
+    logger.info("✅ Surveillance Subscription test successful :)")

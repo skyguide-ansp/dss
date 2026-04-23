@@ -71,7 +71,7 @@ def test_rid_subscription(qh: QueryHelper, eh: EvictHelper):
 
     logger.debug("Check that subscription has been deleted")
     if qh.get_rid_subscription(sub_id):
-        logger.error("❌ Test subscription shall has been deleted by evict")
+        logger.error("❌ Test subscription shall be deleted by evict")
         sys.exit(1)
 
     logger.info("✅ RID Subscription test successful :)")

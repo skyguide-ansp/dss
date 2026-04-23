@@ -18,6 +18,7 @@ import (
 	apiridv1 "github.com/interuss/dss/pkg/api/ridv1"
 	apiridv2 "github.com/interuss/dss/pkg/api/ridv2"
 	apiscdv1 "github.com/interuss/dss/pkg/api/scdv1"
+	apisurveillancev1 "github.com/interuss/dss/pkg/api/surveillancev1"
 	apiversioningv1 "github.com/interuss/dss/pkg/api/versioningv1"
 	"github.com/interuss/dss/pkg/auth"
 	aux "github.com/interuss/dss/pkg/aux_"
@@ -31,6 +32,7 @@ import (
 	ridc "github.com/interuss/dss/pkg/rid/store/datastore"
 	"github.com/interuss/dss/pkg/scd"
 	scdc "github.com/interuss/dss/pkg/scd/store/datastore"
+	surveillance "github.com/interuss/dss/pkg/surveillance/server"
 	"github.com/interuss/dss/pkg/version"
 	"github.com/interuss/dss/pkg/versioning"
 	"github.com/interuss/stacktrace"
@@ -39,13 +41,14 @@ import (
 )
 
 var (
-	address           = flag.String("addr", ":8080", "Local address that the service binds to and listens on for incoming connections")
-	enableSCD         = flag.Bool("enable_scd", false, "Enables the Strategic Conflict Detection API")
-	allowHTTPBaseUrls = flag.Bool("allow_http_base_urls", false, "Enables http scheme for Strategic Conflict Detection API")
-	enableHTTP        = flag.Bool("enable_http", false, "DEPRECATED (replaced by allow_http_base_urls): Enables http scheme for Strategic Conflict Detection API")
-	timeout           = flag.Duration("server timeout", 10*time.Second, "Default timeout for server calls")
-	locality          = flag.String("locality", "", "self-identification string of this DSS instance")
-	publicEndpoint    = flag.String("public_endpoint", "", "Public endpoint to access this DSS instance. Must be an absolute URI")
+	address            = flag.String("addr", ":8080", "Local address that the service binds to and listens on for incoming connections")
+	enableSCD          = flag.Bool("enable_scd", false, "Enables the Strategic Conflict Detection API")
+	enableSurveillance = flag.Bool("enable_surveillance", false, "Enables the Surveillance API")
+	allowHTTPBaseUrls  = flag.Bool("allow_http_base_urls", false, "Enables http scheme for Strategic Conflict Detection API")
+	enableHTTP         = flag.Bool("enable_http", false, "DEPRECATED (replaced by allow_http_base_urls): Enables http scheme for Strategic Conflict Detection API")
+	timeout            = flag.Duration("server timeout", 10*time.Second, "Default timeout for server calls")
+	locality           = flag.String("locality", "", "self-identification string of this DSS instance")
+	publicEndpoint     = flag.String("public_endpoint", "", "Public endpoint to access this DSS instance. Must be an absolute URI")
 
 	logFormat           = flag.String("log_format", logging.DefaultFormat, "The log format in {json, console}")
 	logLevel            = flag.String("log_level", logging.DefaultLevel.String(), "The log level")
@@ -127,6 +130,10 @@ func createRIDServers(ctx context.Context, locality string, logger *zap.Logger) 
 		}, nil
 }
 
+func createSurveillanceServer(ctx context.Context, locality string, logger *zap.Logger) (*surveillance.Server, error) {
+	return &surveillance.Server{}, nil
+}
+
 func createSCDServer(ctx context.Context, logger *zap.Logger) (*scd.Server, error) {
 
 	scdStore, err := scdc.Dial(ctx, logger, true, *scdGlobalLock)
@@ -159,6 +166,7 @@ func RunHTTPServer(ctx context.Context, ctxCanceler func(), address, locality st
 		err                error
 		ridV1Server        *rid_v1.Server
 		ridV2Server        *rid_v2.Server
+		surveillanceServer *surveillance.Server
 		scdV1Server        *scd.Server
 		auxV1Server        *aux.Server
 		versioningV1Server = &versioning.Server{}
@@ -220,6 +228,16 @@ func RunHTTPServer(ctx context.Context, ctxCanceler func(), address, locality st
 
 		scdV1Router := apiscdv1.MakeAPIRouter(scdV1Server, authorizer)
 		multiRouter.Routers = append(multiRouter.Routers, &scdV1Router)
+	}
+
+	if *enableSurveillance {
+		surveillanceServer, err = createSurveillanceServer(ctx, locality, logger)
+		if err != nil {
+			return stacktrace.Propagate(err, "Failed to create surveillance server")
+		}
+
+		surveillancev1Router := apisurveillancev1.MakeAPIRouter(surveillanceServer, authorizer)
+		multiRouter.Routers = append(multiRouter.Routers, &surveillancev1Router)
 	}
 
 	// the middlewares are wrapped and, therefore, executed in the opposite order

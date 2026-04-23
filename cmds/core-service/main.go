@@ -32,7 +32,8 @@ import (
 	"github.com/interuss/dss/pkg/scd"
 	scds "github.com/interuss/dss/pkg/scd/store"
 	"github.com/interuss/dss/pkg/store"
-	surveillance "github.com/interuss/dss/pkg/surveillance/server"
+	surv "github.com/interuss/dss/pkg/surveillance/server"
+	survs "github.com/interuss/dss/pkg/surveillance/store"
 	"github.com/interuss/dss/pkg/version"
 	"github.com/interuss/dss/pkg/versioning"
 	"github.com/interuss/stacktrace"
@@ -130,8 +131,23 @@ func createRIDServers(ctx context.Context, locality string, logger *zap.Logger) 
 		}, nil
 }
 
-func createSurveillanceServer(ctx context.Context, locality string, logger *zap.Logger) (*surveillance.Server, error) {
-	return &surveillance.Server{}, nil
+func createSurveillanceServer(ctx context.Context, locality string, logger *zap.Logger) (*surv.Server, error) {
+	survStore, err := survs.Init(ctx, logger, true)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = survStore.Interact(ctx)
+	if err != nil {
+		return nil, stacktrace.Propagate(err, "Unable to interact with store")
+	}
+
+	app := application.NewFromTransactor(survStore, logger)
+	return &surv.Server{
+		App:               app,
+		Locality:          locality,
+		AllowHTTPBaseUrls: *allowHTTPBaseUrls,
+	}, nil
 }
 
 func createSCDServer(ctx context.Context, logger *zap.Logger) (*scd.Server, error) {
@@ -171,7 +187,7 @@ func RunHTTPServer(ctx context.Context, ctxCanceler func(), address, locality st
 		err                error
 		ridV1Server        *rid_v1.Server
 		ridV2Server        *rid_v2.Server
-		surveillanceServer *surveillance.Server
+		surveillanceServer *surv.Server
 		scdV1Server        *scd.Server
 		auxV1Server        *aux.Server
 		versioningV1Server = &versioning.Server{}

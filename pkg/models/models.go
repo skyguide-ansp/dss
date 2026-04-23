@@ -1,6 +1,7 @@
 package models
 
 import (
+	"net/url"
 	"strconv"
 	"time"
 
@@ -174,4 +175,23 @@ func (v *Version) ToTimestamp() *time.Time {
 		return &t
 	}
 	return &v.t
+}
+
+// ValidateURL ensures https
+func ValidateURL(s string) error {
+	u, err := url.Parse(s)
+	if err != nil {
+		return stacktrace.Propagate(err, "Error parsing URL")
+	}
+
+	switch u.Scheme {
+	case "https":
+		// All good, proceed normally.
+	case "http":
+		return stacktrace.NewError("rid url must use TLS")
+	default:
+		return stacktrace.NewError("rid url must support https scheme")
+	}
+
+	return nil
 }

@@ -153,7 +153,7 @@ func (s *Server) CreateSubscription(ctx context.Context, req *restapi.CreateSubs
 	}
 
 	if !s.AllowHTTPBaseUrls {
-		err = ridmodels.ValidateURL(string(*req.Body.Callbacks.IdentificationServiceAreaUrl))
+		err = dssmodels.ValidateURL(string(*req.Body.Callbacks.IdentificationServiceAreaUrl))
 		if err != nil {
 			return restapi.CreateSubscriptionResponseSet{Response400: &restapi.ErrorResponse{
 				Message: dsserr.Handle(ctx, stacktrace.PropagateWithCode(err, dsserr.BadRequest, "Failed to validate IdentificationServiceAreaUrl"))}}

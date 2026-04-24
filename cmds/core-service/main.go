@@ -18,7 +18,7 @@ import (
 	apiridv1 "github.com/interuss/dss/pkg/api/ridv1"
 	apiridv2 "github.com/interuss/dss/pkg/api/ridv2"
 	apiscdv1 "github.com/interuss/dss/pkg/api/scdv1"
-	apisurveillancev1 "github.com/interuss/dss/pkg/api/surveillancev1"
+	apisurveillancev0 "github.com/interuss/dss/pkg/api/surveillancev0"
 	apiversioningv1 "github.com/interuss/dss/pkg/api/versioningv1"
 	"github.com/interuss/dss/pkg/auth"
 	aux "github.com/interuss/dss/pkg/aux_"
@@ -236,8 +236,8 @@ func RunHTTPServer(ctx context.Context, ctxCanceler func(), address, locality st
 			return stacktrace.Propagate(err, "Failed to create surveillance server")
 		}
 
-		surveillancev1Router := apisurveillancev1.MakeAPIRouter(surveillanceServer, authorizer)
-		multiRouter.Routers = append(multiRouter.Routers, &surveillancev1Router)
+		surveillancev0Router := apisurveillancev0.MakeAPIRouter(surveillanceServer, authorizer)
+		multiRouter.Routers = append(multiRouter.Routers, &surveillancev0Router)
 	}
 
 	// the middlewares are wrapped and, therefore, executed in the opposite order

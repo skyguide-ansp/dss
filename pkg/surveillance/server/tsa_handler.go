@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/interuss/dss/pkg/api"
-	restapi "github.com/interuss/dss/pkg/api/surveillancev1"
+	restapi "github.com/interuss/dss/pkg/api/surveillancev0"
 )
 
 // GetTrafficSurveilledArea returns a single TSA for a given ID.

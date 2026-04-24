@@ -1,4 +1,4 @@
 package server
 
-// Server implements surveillancev1.Implementation.
+// Server implements surveillancev0.Implementation.
 type Server struct{}

@@ -1,5 +1,5 @@
 // This file is auto-generated; do not change as any changes will be overwritten
-package surveillancev1
+package surveillancev0
 
 import (
 	"context"
@@ -20,9 +20,9 @@ type APIRouter struct {
 	Authorizer     api.Authorizer
 }
 
-var tracer = otel.Tracer("surveillancev1.api")
+var tracer = otel.Tracer("surveillancev0.api")
 
-// *surveillancev1.APIRouter (type defined above) implements the api.PartialRouter interface
+// *surveillancev0.APIRouter (type defined above) implements the api.PartialRouter interface
 func (s *APIRouter) Handle(w http.ResponseWriter, r *http.Request) bool {
 	for _, route := range s.Routes {
 		if route.Method == r.Method && route.Pattern.MatchString(r.URL.Path) {
@@ -606,35 +606,35 @@ func (s *APIRouter) DeleteSubscription(exp *regexp.Regexp, w http.ResponseWriter
 func MakeAPIRouter(impl Implementation, auth api.Authorizer) APIRouter {
 	router := APIRouter{Implementation: impl, Authorizer: auth, Routes: make([]*api.Route, 10)}
 
-	pattern := regexp.MustCompile("^/surveillance/v1/dss/traffic_surveilled_areas$")
-	router.Routes[0] = &api.Route{Method: http.MethodGet, Pattern: pattern, Handler: router.SearchTrafficSurveilledAreas, Name: "surveillancev1.SearchTrafficSurveilledAreas", Path: "/surveillance/v1/dss/traffic_surveilled_areas"}
+	pattern := regexp.MustCompile("^/surveillance/v0/dss/traffic_surveilled_areas$")
+	router.Routes[0] = &api.Route{Method: http.MethodGet, Pattern: pattern, Handler: router.SearchTrafficSurveilledAreas, Name: "surveillancev0.SearchTrafficSurveilledAreas", Path: "/surveillance/v0/dss/traffic_surveilled_areas"}
 
-	pattern = regexp.MustCompile("^/surveillance/v1/dss/traffic_surveilled_areas/(?P<id>[^/]*)$")
-	router.Routes[1] = &api.Route{Method: http.MethodGet, Pattern: pattern, Handler: router.GetTrafficSurveilledArea, Name: "surveillancev1.GetTrafficSurveilledArea", Path: "/surveillance/v1/dss/traffic_surveilled_areas/{id}"}
+	pattern = regexp.MustCompile("^/surveillance/v0/dss/traffic_surveilled_areas/(?P<id>[^/]*)$")
+	router.Routes[1] = &api.Route{Method: http.MethodGet, Pattern: pattern, Handler: router.GetTrafficSurveilledArea, Name: "surveillancev0.GetTrafficSurveilledArea", Path: "/surveillance/v0/dss/traffic_surveilled_areas/{id}"}
 
-	pattern = regexp.MustCompile("^/surveillance/v1/dss/traffic_surveilled_areas/(?P<id>[^/]*)$")
-	router.Routes[2] = &api.Route{Method: http.MethodPut, Pattern: pattern, Handler: router.CreateTrafficSurveilledArea, Name: "surveillancev1.CreateTrafficSurveilledArea", Path: "/surveillance/v1/dss/traffic_surveilled_areas/{id}"}
+	pattern = regexp.MustCompile("^/surveillance/v0/dss/traffic_surveilled_areas/(?P<id>[^/]*)$")
+	router.Routes[2] = &api.Route{Method: http.MethodPut, Pattern: pattern, Handler: router.CreateTrafficSurveilledArea, Name: "surveillancev0.CreateTrafficSurveilledArea", Path: "/surveillance/v0/dss/traffic_surveilled_areas/{id}"}
 
-	pattern = regexp.MustCompile("^/surveillance/v1/dss/traffic_surveilled_areas/(?P<id>[^/]*)/(?P<version>[^/]*)$")
-	router.Routes[3] = &api.Route{Method: http.MethodPut, Pattern: pattern, Handler: router.UpdateTrafficSurveilledArea, Name: "surveillancev1.UpdateTrafficSurveilledArea", Path: "/surveillance/v1/dss/traffic_surveilled_areas/{id}/{version}"}
+	pattern = regexp.MustCompile("^/surveillance/v0/dss/traffic_surveilled_areas/(?P<id>[^/]*)/(?P<version>[^/]*)$")
+	router.Routes[3] = &api.Route{Method: http.MethodPut, Pattern: pattern, Handler: router.UpdateTrafficSurveilledArea, Name: "surveillancev0.UpdateTrafficSurveilledArea", Path: "/surveillance/v0/dss/traffic_surveilled_areas/{id}/{version}"}
 
-	pattern = regexp.MustCompile("^/surveillance/v1/dss/traffic_surveilled_areas/(?P<id>[^/]*)/(?P<version>[^/]*)$")
-	router.Routes[4] = &api.Route{Method: http.MethodDelete, Pattern: pattern, Handler: router.DeleteTrafficSurveilledArea, Name: "surveillancev1.DeleteTrafficSurveilledArea", Path: "/surveillance/v1/dss/traffic_surveilled_areas/{id}/{version}"}
+	pattern = regexp.MustCompile("^/surveillance/v0/dss/traffic_surveilled_areas/(?P<id>[^/]*)/(?P<version>[^/]*)$")
+	router.Routes[4] = &api.Route{Method: http.MethodDelete, Pattern: pattern, Handler: router.DeleteTrafficSurveilledArea, Name: "surveillancev0.DeleteTrafficSurveilledArea", Path: "/surveillance/v0/dss/traffic_surveilled_areas/{id}/{version}"}
 
-	pattern = regexp.MustCompile("^/surveillance/v1/dss/subscriptions$")
-	router.Routes[5] = &api.Route{Method: http.MethodGet, Pattern: pattern, Handler: router.SearchSubscriptions, Name: "surveillancev1.SearchSubscriptions", Path: "/surveillance/v1/dss/subscriptions"}
+	pattern = regexp.MustCompile("^/surveillance/v0/dss/subscriptions$")
+	router.Routes[5] = &api.Route{Method: http.MethodGet, Pattern: pattern, Handler: router.SearchSubscriptions, Name: "surveillancev0.SearchSubscriptions", Path: "/surveillance/v0/dss/subscriptions"}
 
-	pattern = regexp.MustCompile("^/surveillance/v1/dss/subscriptions/(?P<id>[^/]*)$")
-	router.Routes[6] = &api.Route{Method: http.MethodGet, Pattern: pattern, Handler: router.GetSubscription, Name: "surveillancev1.GetSubscription", Path: "/surveillance/v1/dss/subscriptions/{id}"}
+	pattern = regexp.MustCompile("^/surveillance/v0/dss/subscriptions/(?P<id>[^/]*)$")
+	router.Routes[6] = &api.Route{Method: http.MethodGet, Pattern: pattern, Handler: router.GetSubscription, Name: "surveillancev0.GetSubscription", Path: "/surveillance/v0/dss/subscriptions/{id}"}
 
-	pattern = regexp.MustCompile("^/surveillance/v1/dss/subscriptions/(?P<id>[^/]*)$")
-	router.Routes[7] = &api.Route{Method: http.MethodPut, Pattern: pattern, Handler: router.CreateSubscription, Name: "surveillancev1.CreateSubscription", Path: "/surveillance/v1/dss/subscriptions/{id}"}
+	pattern = regexp.MustCompile("^/surveillance/v0/dss/subscriptions/(?P<id>[^/]*)$")
+	router.Routes[7] = &api.Route{Method: http.MethodPut, Pattern: pattern, Handler: router.CreateSubscription, Name: "surveillancev0.CreateSubscription", Path: "/surveillance/v0/dss/subscriptions/{id}"}
 
-	pattern = regexp.MustCompile("^/surveillance/v1/dss/subscriptions/(?P<id>[^/]*)/(?P<version>[^/]*)$")
-	router.Routes[8] = &api.Route{Method: http.MethodPut, Pattern: pattern, Handler: router.UpdateSubscription, Name: "surveillancev1.UpdateSubscription", Path: "/surveillance/v1/dss/subscriptions/{id}/{version}"}
+	pattern = regexp.MustCompile("^/surveillance/v0/dss/subscriptions/(?P<id>[^/]*)/(?P<version>[^/]*)$")
+	router.Routes[8] = &api.Route{Method: http.MethodPut, Pattern: pattern, Handler: router.UpdateSubscription, Name: "surveillancev0.UpdateSubscription", Path: "/surveillance/v0/dss/subscriptions/{id}/{version}"}
 
-	pattern = regexp.MustCompile("^/surveillance/v1/dss/subscriptions/(?P<id>[^/]*)/(?P<version>[^/]*)$")
-	router.Routes[9] = &api.Route{Method: http.MethodDelete, Pattern: pattern, Handler: router.DeleteSubscription, Name: "surveillancev1.DeleteSubscription", Path: "/surveillance/v1/dss/subscriptions/{id}/{version}"}
+	pattern = regexp.MustCompile("^/surveillance/v0/dss/subscriptions/(?P<id>[^/]*)/(?P<version>[^/]*)$")
+	router.Routes[9] = &api.Route{Method: http.MethodDelete, Pattern: pattern, Handler: router.DeleteSubscription, Name: "surveillancev0.DeleteSubscription", Path: "/surveillance/v0/dss/subscriptions/{id}/{version}"}
 
 	return router
 }

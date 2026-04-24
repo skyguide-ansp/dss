@@ -1,5 +1,5 @@
 // This file is auto-generated; do not change as any changes will be overwritten
-package surveillancev1
+package surveillancev0
 
 // Human-readable string returned when an error occurs as a result of a USS - DSS transaction.
 type ErrorResponse struct {

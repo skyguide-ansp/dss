@@ -141,13 +141,13 @@ type PutTrafficSurveilledAreaResponse struct {
 	Subscribers *[]SubscriberToNotify `json:"subscribers,omitempty"`
 
 	// Resulting surveilled area stored in DSS.
-	ServiceArea TrafficSurveilledArea `json:"service_area"`
+	SurveilledArea TrafficSurveilledArea `json:"surveilled_area"`
 }
 
 // Response to DSS query for Traffic Surveilled Areas in an area of interest.
 type SearchTrafficSurveilledAreasResponse struct {
 	// Traffic Surveilled Areas in the area of interest.
-	ServiceAreas *[]TrafficSurveilledArea `json:"service_areas,omitempty"`
+	SurveilledAreas *[]TrafficSurveilledArea `json:"surveilled_areas,omitempty"`
 }
 
 // Subscriber to notify of a creation/change/deletion of a change in the airspace.  This is provided by the DSS to a client changing the airspace, and it is the responsibility of the client changing the airspace (they will receive a set of these notification requests) to send a notification to each specified `url`.
@@ -162,7 +162,7 @@ type SubscriberToNotify struct {
 // Response for a request to delete an Traffic Surveilled Area.
 type DeleteTrafficSurveilledAreaResponse struct {
 	// Traffic Surveilled Area that was just deleted.
-	ServiceArea TrafficSurveilledArea `json:"service_area"`
+	SurveilledArea TrafficSurveilledArea `json:"surveilled_area"`
 
 	// DSS subscribers that this client now has the obligation to notify of the Traffic Surveilled Area just deleted.  This client must call POST for each provided URL according to the `/uss/traffic_surveilled_areas` path API.
 	Subscribers *[]SubscriberToNotify `json:"subscribers,omitempty"`
@@ -171,7 +171,7 @@ type DeleteTrafficSurveilledAreaResponse struct {
 // Response for a request to create or update a subscription.
 type PutSubscriptionResponse struct {
 	// Traffic Surveilled Areas in or near the subscription area at the time of creation/update, if `traffic_surveilled_area_url` callback was specified.
-	ServiceAreas *[]TrafficSurveilledArea `json:"service_areas,omitempty"`
+	SurveilledArea *[]TrafficSurveilledArea `json:"surveilled_area,omitempty"`
 
 	// Result of the operation on the subscription.
 	Subscription Subscription `json:"subscription"`
@@ -179,14 +179,12 @@ type PutSubscriptionResponse struct {
 
 // Response to DSS request for the surveilled area with the given ID.
 type GetTrafficSurveilledAreaResponse struct {
-	ServiceArea TrafficSurveilledArea `json:"service_area"`
+	SurveilledArea TrafficSurveilledArea `json:"surveilled_area"`
 }
 
 // Parameters for a request to create an Traffic Surveilled Area in the DSS.
 type CreateTrafficSurveilledAreaParameters struct {
-	// The bounding spacetime extents of this Traffic Surveilled Area.  End time must be specified.  If start time is not specified, it will be set to the current time.  Start times in the past should be rejected by the DSS, except that it may adjust very recent start times to the current time.
-	//
-	// These extents should not reveal any sensitive information about the flight or flights within them.  This means, for instance, that extents should not tightly-wrap a flight path, nor should they generally be centered around the takeoff point of a single flight.
+	// The bounding spacetime extents of this Traffic Surveilled Area.  If start time is not specified, it will be set to the current time.  Start times in the past should be rejected by the DSS, except that it may adjust very recent start times to the current time.
 	Extents Volume4D `json:"extents"`
 
 	UssBaseUrl FlightsUSSBaseURL `json:"uss_base_url"`
@@ -194,9 +192,7 @@ type CreateTrafficSurveilledAreaParameters struct {
 
 // Parameters for a request to update an Traffic Surveilled Area in the DSS.
 type UpdateTrafficSurveilledAreaParameters struct {
-	// The bounding spacetime extents of this Traffic Surveilled Area.  End time must be specified.  If start time is not specified, it will remain unchanged.  Start times in the past should be rejected by the DSS unless they are unchanged from the Traffic Surveilled Area's current start time.
-	//
-	// These extents should not reveal any sensitive information about the flight or flights within them.  This means, for instance, that extents should not tightly-wrap a flight path, nor should they generally be centered around the takeoff point of a single flight.
+	// The bounding spacetime extents of this Traffic Surveilled Area.  If start time is not specified, it will remain unchanged.  Start times in the past should be rejected by the DSS unless they are unchanged from the Traffic Surveilled Area's current start time.
 	Extents Volume4D `json:"extents"`
 
 	UssBaseUrl FlightsUSSBaseURL `json:"uss_base_url"`

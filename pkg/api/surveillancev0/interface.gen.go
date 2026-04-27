@@ -423,20 +423,17 @@ type Implementation interface {
 	// /dss/traffic_surveilled_areas/{id}
 	// ---
 	// Create a new Traffic Surveilled Area.  This call will fail if an Traffic Surveilled Area with the same ID already exists.
-	//
-	// The DSS assumes the USS has already added the appropriate retention period to operation end time in `time_end` field before storing it.
 	CreateTrafficSurveilledArea(ctx context.Context, req *CreateTrafficSurveilledAreaRequest) CreateTrafficSurveilledAreaResponseSet
 
 	// /dss/traffic_surveilled_areas/{id}/{version}
 	// ---
 	// Update an Traffic Surveilled Area.  The full content of the existing Traffic Surveilled Area will be replaced with the provided information as only the most recent version is retained.
-	//
-	// The DSS assumes the USS has already added the appropriate retention period to operation end time in `time_end` field before storing it.  Updating `time_start` is not allowed if it is before the current time.
+	// Updating `time_start` is not allowed if it is before the current time.
 	UpdateTrafficSurveilledArea(ctx context.Context, req *UpdateTrafficSurveilledAreaRequest) UpdateTrafficSurveilledAreaResponseSet
 
 	// /dss/traffic_surveilled_areas/{id}/{version}
 	// ---
-	// Delete an Traffic Surveilled Area.  USSs should not delete Traffic Surveilled Areas before the end of the last managed flight plus the retention period.
+	// Delete an Traffic Surveilled Area.
 	DeleteTrafficSurveilledArea(ctx context.Context, req *DeleteTrafficSurveilledAreaRequest) DeleteTrafficSurveilledAreaResponseSet
 
 	// /dss/subscriptions

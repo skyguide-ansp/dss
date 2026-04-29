@@ -33,7 +33,7 @@ count_ybdb() {
 
 test_datastore() {
 
-    for DATABASE in scd rid aux; do
+    for DATABASE in scd rid surveillance aux; do
 
         if [[ "$DATABASE" == "aux" ]]; then
             DATABASE_FOLDER="aux_"

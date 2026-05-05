@@ -171,7 +171,7 @@ type DeleteTrafficSurveilledAreaResponse struct {
 // Response for a request to create or update a subscription.
 type PutSubscriptionResponse struct {
 	// Traffic Surveilled Areas in or near the subscription area at the time of creation/update, if `traffic_surveilled_area_url` callback was specified.
-	SurveilledArea *[]TrafficSurveilledArea `json:"surveilled_area,omitempty"`
+	SurveilledAreas *[]TrafficSurveilledArea `json:"surveilled_areas,omitempty"`
 
 	// Result of the operation on the subscription.
 	Subscription Subscription `json:"subscription"`

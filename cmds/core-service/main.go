@@ -41,14 +41,13 @@ import (
 )
 
 var (
-	address            = flag.String("addr", ":8080", "Local address that the service binds to and listens on for incoming connections")
-	enableSCD          = flag.Bool("enable_scd", false, "Enables the Strategic Conflict Detection API")
-	enableSurveillance = flag.Bool("enable_surveillance", false, "Enables the Surveillance API")
-	allowHTTPBaseUrls  = flag.Bool("allow_http_base_urls", false, "Enables http scheme for Strategic Conflict Detection API")
-	enableHTTP         = flag.Bool("enable_http", false, "DEPRECATED (replaced by allow_http_base_urls): Enables http scheme for Strategic Conflict Detection API")
-	timeout            = flag.Duration("server timeout", 10*time.Second, "Default timeout for server calls")
-	locality           = flag.String("locality", "", "self-identification string of this DSS instance")
-	publicEndpoint     = flag.String("public_endpoint", "", "Public endpoint to access this DSS instance. Must be an absolute URI")
+	address           = flag.String("addr", ":8080", "Local address that the service binds to and listens on for incoming connections")
+	enableSCD         = flag.Bool("enable_scd", false, "Enables the Strategic Conflict Detection API")
+	allowHTTPBaseUrls = flag.Bool("allow_http_base_urls", false, "Enables http scheme for Strategic Conflict Detection API")
+	enableHTTP        = flag.Bool("enable_http", false, "DEPRECATED (replaced by allow_http_base_urls): Enables http scheme for Strategic Conflict Detection API")
+	timeout           = flag.Duration("server timeout", 10*time.Second, "Default timeout for server calls")
+	locality          = flag.String("locality", "", "self-identification string of this DSS instance")
+	publicEndpoint    = flag.String("public_endpoint", "", "Public endpoint to access this DSS instance. Must be an absolute URI")
 
 	logFormat           = flag.String("log_format", logging.DefaultFormat, "The log format in {json, console}")
 	logLevel            = flag.String("log_level", logging.DefaultLevel.String(), "The log level")
@@ -187,6 +186,12 @@ func RunHTTPServer(ctx context.Context, ctxCanceler func(), address, locality st
 		return stacktrace.Propagate(err, "Failed to create remote ID server")
 	}
 
+	// Initialize surveillance
+	surveillanceServer, err = createSurveillanceServer(ctx, locality, logger)
+	if err != nil {
+		return stacktrace.Propagate(err, "Failed to create surveillance server")
+	}
+
 	// Initialize access token validation
 	keyResolver, err := createKeyResolver()
 	switch {
@@ -211,12 +216,14 @@ func RunHTTPServer(ctx context.Context, ctxCanceler func(), address, locality st
 	versioningV1Router := apiversioningv1.MakeAPIRouter(versioningV1Server, authorizer)
 	ridV1Router := apiridv1.MakeAPIRouter(ridV1Server, authorizer)
 	ridV2Router := apiridv2.MakeAPIRouter(ridV2Server, authorizer)
+	surveillancev0Router := apisurveillancev0.MakeAPIRouter(surveillanceServer, authorizer)
 	multiRouter := api.MultiRouter{
 		Routers: []api.PartialRouter{
 			&auxV1Router,
 			&versioningV1Router,
 			&ridV1Router,
 			&ridV2Router,
+			&surveillancev0Router,
 		}}
 
 	// Initialize strategic conflict detection
@@ -228,16 +235,6 @@ func RunHTTPServer(ctx context.Context, ctxCanceler func(), address, locality st
 
 		scdV1Router := apiscdv1.MakeAPIRouter(scdV1Server, authorizer)
 		multiRouter.Routers = append(multiRouter.Routers, &scdV1Router)
-	}
-
-	if *enableSurveillance {
-		surveillanceServer, err = createSurveillanceServer(ctx, locality, logger)
-		if err != nil {
-			return stacktrace.Propagate(err, "Failed to create surveillance server")
-		}
-
-		surveillancev0Router := apisurveillancev0.MakeAPIRouter(surveillanceServer, authorizer)
-		multiRouter.Routers = append(multiRouter.Routers, &surveillancev0Router)
 	}
 
 	// the middlewares are wrapped and, therefore, executed in the opposite order

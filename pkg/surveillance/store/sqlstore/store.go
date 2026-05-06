@@ -11,7 +11,7 @@ import (
 
 const (
 	// The current major schema version per sqlstore type.
-	currentCrdbMajorSchemaVersion     = 1
+	currentCrdbMajorSchemaVersion     = 4
 	currentYugabyteMajorSchemaVersion = 1
 )
 

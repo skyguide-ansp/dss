@@ -136,16 +136,6 @@ func ToTime(t *time.Time) *restapi.Time {
 	return (*restapi.Time)(ridv2api.ToTime(t))
 }
 
-// ToLatLngPoint converts latlngpoint business object to Surveillance v1 REST model
-func ToLatLngPoint(pt *dssmodels.LatLngPoint) *restapi.LatLngPoint {
-	result := &restapi.LatLngPoint{
-		Lat: restapi.Latitude(pt.Lat),
-		Lng: restapi.Longitude(pt.Lng),
-	}
-
-	return result
-}
-
 // ToTrafficSurveilledArea converts an TrafficSurveilledArea
 // business object to Surveillance v1 REST model for API consumption.
 func ToTrafficSurveilledArea(i *TrafficSurveilledArea) *restapi.TrafficSurveilledArea {
@@ -163,21 +153,6 @@ func ToTrafficSurveilledArea(i *TrafficSurveilledArea) *restapi.TrafficSurveille
 	}
 
 	return result
-}
-
-// ToSubscriberToNotify converts a subscription to a SubscriberToNotify Surveillance v1 REST model
-// for API consumption.
-func ToSubscriberToNotify(s *Subscription) *restapi.SubscriberToNotify {
-	notifIdx := restapi.SubscriptionNotificationIndex(s.NotificationIndex)
-	return &restapi.SubscriberToNotify{
-		Url: restapi.URL(s.URL),
-		Subscriptions: []restapi.SubscriptionState{
-			{
-				NotificationIndex: &notifIdx,
-				SubscriptionId:    restapi.SubscriptionUUID(s.ID.String()),
-			},
-		},
-	}
 }
 
 // MakeSubscribersToNotify groups the passed subscriptions by their callback URL,

@@ -32,8 +32,8 @@ import (
 	"github.com/interuss/dss/pkg/scd"
 	scds "github.com/interuss/dss/pkg/scd/store"
 	"github.com/interuss/dss/pkg/store"
-	surv "github.com/interuss/dss/pkg/surveillance/server"
-	survs "github.com/interuss/dss/pkg/surveillance/store"
+	surveillance "github.com/interuss/dss/pkg/surveillance/server"
+	surveillances "github.com/interuss/dss/pkg/surveillance/store"
 	"github.com/interuss/dss/pkg/version"
 	"github.com/interuss/dss/pkg/versioning"
 	"github.com/interuss/stacktrace"
@@ -131,8 +131,8 @@ func createRIDServers(ctx context.Context, locality string, logger *zap.Logger) 
 		}, nil
 }
 
-func createSurveillanceServer(ctx context.Context, locality string, logger *zap.Logger) (*surv.Server, error) {
-	survStore, err := survs.Init(ctx, logger, true)
+func createSurveillanceServer(ctx context.Context, locality string, logger *zap.Logger) (*surveillance.Server, error) {
+	survStore, err := surveillances.Init(ctx, logger, true)
 	if err != nil {
 		return nil, err
 	}
@@ -143,7 +143,7 @@ func createSurveillanceServer(ctx context.Context, locality string, logger *zap.
 	}
 
 	app := application.NewFromTransactor(survStore, logger)
-	return &surv.Server{
+	return &surveillance.Server{
 		App:               app,
 		Locality:          locality,
 		AllowHTTPBaseUrls: *allowHTTPBaseUrls,
@@ -187,7 +187,7 @@ func RunHTTPServer(ctx context.Context, ctxCanceler func(), address, locality st
 		err                error
 		ridV1Server        *rid_v1.Server
 		ridV2Server        *rid_v2.Server
-		surveillanceServer *surv.Server
+		surveillanceServer *surveillance.Server
 		scdV1Server        *scd.Server
 		auxV1Server        *aux.Server
 		versioningV1Server = &versioning.Server{}
@@ -208,7 +208,6 @@ func RunHTTPServer(ctx context.Context, ctxCanceler func(), address, locality st
 		return stacktrace.Propagate(err, "Failed to create remote ID server")
 	}
 
-	// Initialize surveillance
 	surveillanceServer, err = createSurveillanceServer(ctx, locality, logger)
 	if err != nil {
 		return stacktrace.Propagate(err, "Failed to create surveillance server")

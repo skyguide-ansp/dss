@@ -3,6 +3,9 @@ package models
 import (
 	"time"
 
+	ridv2restapi "github.com/interuss/dss/pkg/api/ridv2"
+	ridv2api "github.com/interuss/dss/pkg/rid/models/api/v2"
+
 	restapi "github.com/interuss/dss/pkg/api/surveillancev0"
 	dssmodels "github.com/interuss/dss/pkg/models"
 	"github.com/interuss/stacktrace"
@@ -12,35 +15,14 @@ import (
 
 // FromTime converts Surveillance v1 REST model to standard golang Time
 func FromTime(t *restapi.Time) (*time.Time, error) {
-	if t == nil {
-		return nil, nil
-	}
-	if t.Format != "RFC3339" {
-		return nil, stacktrace.NewError("Invalid time format '%v'; expected 'RFC3339'", t.Format)
-	}
-	if t.Value == "" {
-		return nil, stacktrace.NewError("Time structure specified, but `value` was missing")
-	}
-	ts, err := time.Parse(time.RFC3339Nano, t.Value)
-	if err != nil {
-		return nil, stacktrace.Propagate(err, "Error converting time")
-	}
-	return &ts, nil
+	ridv2time := (*ridv2restapi.Time)(t)
+	return ridv2api.FromTime(ridv2time)
 }
 
 // FromAltitude converts Surveillance v1 REST model to float
 func FromAltitude(alt *restapi.Altitude) (*float32, error) {
-	if alt == nil {
-		return nil, nil
-	}
-	if alt.Reference != "W84" {
-		return nil, stacktrace.NewError("Invalid altitude reference '%v'; expected 'W84'", alt.Reference)
-	}
-	if alt.Units != "M" {
-		return nil, stacktrace.NewError("Invalid units '%v'; expected 'M'", alt.Units)
-	}
-	value := float32(alt.Value)
-	return &value, nil
+	ridv2alt := (*ridv2restapi.Altitude)(alt)
+	return ridv2api.FromAltitude(ridv2alt)
 }
 
 // FromVolume4D converts Surveillance v1 REST model to business object
@@ -151,26 +133,7 @@ func FromLatLngPoint(pt *restapi.LatLngPoint) *dssmodels.LatLngPoint {
 
 // ToTime converts standard golang Time to Surveillance v1 REST model
 func ToTime(t *time.Time) *restapi.Time {
-	if t == nil {
-		return nil
-	}
-
-	result := &restapi.Time{
-		Format: "RFC3339",
-		Value:  t.Format(time.RFC3339Nano),
-	}
-
-	return result
-}
-
-// ToLatLngPoint converts latlngpoint business object to Surveillance v1 REST model
-func ToLatLngPoint(pt *dssmodels.LatLngPoint) *restapi.LatLngPoint {
-	result := &restapi.LatLngPoint{
-		Lat: restapi.Latitude(pt.Lat),
-		Lng: restapi.Longitude(pt.Lng),
-	}
-
-	return result
+	return (*restapi.Time)(ridv2api.ToTime(t))
 }
 
 // ToTrafficSurveilledArea converts an TrafficSurveilledArea
@@ -190,21 +153,6 @@ func ToTrafficSurveilledArea(i *TrafficSurveilledArea) *restapi.TrafficSurveille
 	}
 
 	return result
-}
-
-// ToSubscriberToNotify converts a subscription to a SubscriberToNotify Surveillance v1 REST model
-// for API consumption.
-func ToSubscriberToNotify(s *Subscription) *restapi.SubscriberToNotify {
-	notifIdx := restapi.SubscriptionNotificationIndex(s.NotificationIndex)
-	return &restapi.SubscriberToNotify{
-		Url: restapi.URL(s.URL),
-		Subscriptions: []restapi.SubscriptionState{
-			{
-				NotificationIndex: &notifIdx,
-				SubscriptionId:    restapi.SubscriptionUUID(s.ID.String()),
-			},
-		},
-	}
 }
 
 // MakeSubscribersToNotify groups the passed subscriptions by their callback URL,

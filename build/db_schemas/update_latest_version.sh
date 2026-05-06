@@ -55,14 +55,6 @@ $(find rid -type f -print0 | sort -z | xargs -0 -I {} basename {} | awk '{print 
 }
 EOF
 
-cat <<EOF > surveillance.libsonnet
-{
-  data:{
-$(find surveillance -type f -print0 | sort -z | xargs -0 -I {} basename {} | awk '{print "    \"" $1 "\": importstr \"surveillance/" $1 "\","}')
-  },
-}
-EOF
-
 cat <<EOF > scd.libsonnet
 {
   data:{

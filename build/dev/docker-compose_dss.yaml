@@ -88,7 +88,7 @@ services:
         condition: service_healthy
     networks:
       - dss_sandbox_default_network
-  
+
   local-dss-surveillance-bootstrapper:
     image: interuss-local/dss
     command: /usr/bin/db-manager migrate --schemas_dir=/db-schemas/surveillance --db_version "latest" --datastore_host local-dss-crdb

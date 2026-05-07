@@ -28,6 +28,8 @@ local datastoreparameters = import 'datastoreparameters.libsonnet';
                       scd_sub: metadata.evict.scd.subscriptions,
                       rid_isa: false,
                       rid_sub: false,
+                      surveillance_tsa: false,
+                      surveillance_sub: false,
                       scd_ttl: metadata.evict.scd.ttl,
                       locality: metadata.locality,
                       delete: true,
@@ -64,7 +66,43 @@ local datastoreparameters = import 'datastoreparameters.libsonnet';
                       scd_sub: false,
                       rid_isa: metadata.evict.rid.ISAs,
                       rid_sub: metadata.evict.rid.subscriptions,
+                      surveillance_tsa: false,
+                      surveillance_sub: false,
                       rid_ttl: metadata.evict.rid.ttl,
+                      locality: metadata.locality,
+                      delete: true,
+                  } + datastoreparameters.all(metadata),
+                  volumeMounts: volumes.all(metadata).schemaMounts,
+                }],
+              },
+            },
+          },
+        },
+      },
+    },
+    SurveillanceEvict: base.CronJob(metadata, 'dss-surveillance-evict') {
+      spec+: {
+        schedule: metadata.evict.surveillance.schedule,
+        suspend: !metadata.evict.surveillance.enable_cron,
+        concurrencyPolicy: "Forbid",
+        jobTemplate: {
+          spec: {
+            template: {
+              spec: {
+                volumes: volumes.all(metadata).schemaVolumes,
+                restartPolicy: "Never",
+                containers: [base.Container('dss-surveillance-evict') {
+                  image: metadata.schema_manager.image,
+                  imagePullPolicy: if metadata.cloud_provider == "minikube" then 'IfNotPresent' else 'Always',
+                  command: ['db-manager', 'evict'],
+                  args_:: {
+                      scd_oir: false,
+                      scd_sub: false,
+                      rid_isa: false,
+                      rid_sub: false,
+                      surveillance_tsa: metadata.evict.surveillance.TSAs,
+                      surveillance_sub: metadata.evict.surveillance.subscriptions,
+                      surveillance_ttl: metadata.evict.surveillance.ttl,
                       locality: metadata.locality,
                       delete: true,
                   } + datastoreparameters.all(metadata),

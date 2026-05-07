@@ -8,7 +8,6 @@
   // This disables inter cluster crdb<->crdb access when set to true.
   single_cluster: false,
   enableScd: false,
-  enableSurveillance: false,
   enableScdGlobalLock: false,
   datastore: 'cockroachdb',
   locality: error 'must supply locality',

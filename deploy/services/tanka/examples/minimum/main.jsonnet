@@ -11,7 +11,6 @@ local metadata = metadataBase {
   clusterName: 'VAR_CLUSTER_CONTEXT',
   single_cluster: false,
   enableScd: false, // <-- This boolean value is VAR_ENABLE_SCD
-  enableSurveillance: false, // <-- This boolean value is VAR_ENABLE_SURVEILLANCE
   enableScdGlobalLock: false, // <-- This boolean value is VAR_ENABLE_SCD_GLOBAL_LOCK
   datastore: 'VAR_DATASTORE',
   locality: 'VAR_LOCALITY',

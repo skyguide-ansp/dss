@@ -263,9 +263,6 @@
             "enableScd": {
               "type": "boolean"
             },
-            "enableSurveillance": {
-              "type": "boolean"
-            },
             "enableScdGlobalLock": {
               "type": "boolean"
             },

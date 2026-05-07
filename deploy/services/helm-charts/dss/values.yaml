@@ -3,7 +3,6 @@
 dss:
   conf:
     enableScd: true
-    enableSurveillance: false
     evict:
       scd:
           enableCron: false

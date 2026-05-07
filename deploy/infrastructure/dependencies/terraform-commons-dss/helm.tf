@@ -67,7 +67,6 @@ resource "local_file" "helm_chart_values" {
         hostname            = var.app_hostname
         publicEndpoint      = "https://${var.app_hostname}"
         enableScd           = var.enable_scd
-        enableSurveillance  = var.enable_surveillance
         enableScdGlobalLock = var.enable_scd_global_lock
         locality            = "zone=${var.locality}"
 

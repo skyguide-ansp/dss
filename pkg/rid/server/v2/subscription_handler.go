@@ -149,7 +149,7 @@ func (s *Server) CreateSubscription(ctx context.Context, req *restapi.CreateSubs
 	}
 
 	if !s.AllowHTTPBaseUrls {
-		err = dssmodels.ValidateURL(string(req.Body.UssBaseUrl))
+		err = ridmodels.ValidateURL(string(req.Body.UssBaseUrl))
 		if err != nil {
 			return restapi.CreateSubscriptionResponseSet{Response400: &restapi.ErrorResponse{
 				Message: dsserr.Handle(ctx, stacktrace.PropagateWithCode(err, dsserr.BadRequest, "Failed to validate UssBaseUrl"))}}

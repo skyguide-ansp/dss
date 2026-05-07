@@ -8,6 +8,7 @@ import (
 	dsserr "github.com/interuss/dss/pkg/errors"
 	"github.com/interuss/dss/pkg/geo"
 	dssmodels "github.com/interuss/dss/pkg/models"
+	ridmodels "github.com/interuss/dss/pkg/rid/models"
 	survmodels "github.com/interuss/dss/pkg/surveillance/models"
 	"github.com/interuss/stacktrace"
 	"github.com/pkg/errors"
@@ -148,7 +149,7 @@ func (s *Server) CreateSubscription(ctx context.Context, req *restapi.CreateSubs
 	}
 
 	if !s.AllowHTTPBaseUrls {
-		err = dssmodels.ValidateURL(string(req.Body.UssBaseUrl))
+		err = ridmodels.ValidateURL(string(req.Body.UssBaseUrl))
 		if err != nil {
 			return restapi.CreateSubscriptionResponseSet{Response400: &restapi.ErrorResponse{
 				Message: dsserr.Handle(ctx, stacktrace.PropagateWithCode(err, dsserr.BadRequest, "Failed to validate UssBaseUrl"))}}

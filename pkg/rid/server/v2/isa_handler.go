@@ -67,7 +67,7 @@ func (s *Server) CreateIdentificationServiceArea(ctx context.Context, req *resta
 	}
 
 	if !s.AllowHTTPBaseUrls {
-		err = dssmodels.ValidateURL(string(req.Body.UssBaseUrl))
+		err = ridmodels.ValidateURL(string(req.Body.UssBaseUrl))
 		if err != nil {
 			return restapi.CreateIdentificationServiceAreaResponseSet{Response400: &restapi.ErrorResponse{
 				Message: dsserr.Handle(ctx, stacktrace.PropagateWithCode(err, dsserr.BadRequest, "Failed to validate base URL"))}}

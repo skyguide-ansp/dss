@@ -218,23 +218,15 @@ func evict(cmd *cobra.Command, _ []string) error {
 	for _, sub := range ridExpiredSub {
 		logExpiredEntity("RID subscription", sub.ID, ridThreshold, *deleteExpired, sub.EndTime != nil)
 	}
-	for _, tsa := range expiredTSAs {
-		logExpiredEntity("TSA", tsa.ID, survThreshold, *deleteExpired, tsa.EndTime != nil)
-	}
-	for _, sub := range survExpiredSub {
-		logExpiredEntity("Surveillance subscription", sub.ID, survThreshold, *deleteExpired, sub.EndTime != nil)
-	}
-	if len(expiredOpIntents)+len(scdExpiredSub) == 0 {
-		log.Printf("no SCD entity older than %s found", scdThreshold.String())
-	}
-	if len(expiredISAs)+len(ridExpiredSub) == 0 {
-		log.Printf("no RID entity older than %s found", ridThreshold.String())
-	}
-	if len(expiredTSAs)+len(survExpiredSub) == 0 {
-		log.Printf("no surveillance entity older than %s found", survThreshold.String())
-	}
-
-	if !*deleteExpired {
+	if len(expiredOpIntents) == 0 && len(scdExpiredSub) == 0 &&
+		len(expiredISAs) == 0 && len(ridExpiredSub) == 0 &&
+		len(expiredTSAs) == 0 && len(survExpiredSub) == 0 {
+		log.Printf("no SCD entity older than %s, no RID entity older than %s and no surveillance entity older than %s found",
+			scdThreshold.String(),
+			ridThreshold.String(),
+			survThreshold.String(),
+		)
+	} else if !*deleteExpired {
 		log.Printf("no entity was deleted, run the command again with the `--delete` flag to do so")
 	}
 	return nil

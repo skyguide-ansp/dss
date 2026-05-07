@@ -308,7 +308,7 @@
                     }
                   }
                 },
-                "rid": {
+                "scd": {
                   "description": "RID Related configuration",
                   "type": "object",
                   "properties": {

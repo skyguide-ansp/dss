@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -eo pipefail
-# set -x
+set -x
 
 # Find and change to repo root directory
 OS=$(uname)

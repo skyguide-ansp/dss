@@ -76,7 +76,7 @@ local metadata = metadataBase {
       subscriptions: true, // <-- this boolean value is VAR_EVICT_SCD_ENABLE_SUBSCRIPTIONS
     },
     rid+: {
-      enable_cron: true, // <-- this boolean value is VAR_EVICT_ENABLE_RID_CRON
+      enable_cron: true, // <-- this boolean value is VAR_EVICT_ENABLE_SCD_CRON
       schedule: "VAR_EVICT_RID_SCHEDULE",
       ttl: "VAR_EVICT_RID_TTL",
       ISAs: true, // <-- this boolean value is VAR_EVICT_RID_ENABLE_ISAS

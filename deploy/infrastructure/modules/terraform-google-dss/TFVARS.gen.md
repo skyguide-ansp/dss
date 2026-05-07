@@ -130,7 +130,7 @@ Use <code>latest</code> to use the latest schema version.</p>
                 <td>desired_surveillance_db_version (<code>string</code>)</td>
                 <td><p>Desired Surveillance DB schema version.
 Use <code>latest</code> to use the latest schema version.</p>
-<p>Example: <code>1.0.0</code></p>
+<p>Example: <code>4.0.0</code></p>
 <br/>Default value: <code>"latest"</code></td>
             </tr><tr>
                 <td>enable_monitoring (<code>bool</code>)</td>

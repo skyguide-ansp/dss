@@ -71,7 +71,7 @@ def test_surveillance_TSA(qh: QueryHelper, eh: EvictHelper):
 
     logger.debug("Check that TSA has been deleted")
     if qh.get_surveillance_TSA(TSA_id):
-        logger.error("❌ Test TSA shall has been deleted by evict")
+        logger.error("❌ Test subscription shall has been deleted by evict")
         sys.exit(1)
 
     logger.info("✅ Surveillance TSA test successful :)")

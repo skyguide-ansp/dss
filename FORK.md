@@ -35,3 +35,7 @@ Add surveillance support to db-manager evict.
 ### [surveillance] add surveillance infra
 
 Add infrastructure changes to support surveillance.
+
+### [scd] Use astm-utm spec patched for ED-318
+
+Point to the patched the astm-utm specification for ED-318 publication through constraints

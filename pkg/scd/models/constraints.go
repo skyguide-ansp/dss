@@ -36,14 +36,14 @@ func (c *Constraint) ToRest() *restapi.ConstraintReference {
 	}
 
 	if c.StartTime != nil {
-		result.TimeStart = restapi.Time{
+		result.TimeStart = &restapi.Time{
 			Value:  c.StartTime.Format(time.RFC3339Nano),
 			Format: dssmodels.TimeFormatRFC3339,
 		}
 	}
 
 	if c.EndTime != nil {
-		result.TimeEnd = restapi.Time{
+		result.TimeEnd = &restapi.Time{
 			Value:  c.EndTime.Format(time.RFC3339Nano),
 			Format: dssmodels.TimeFormatRFC3339,
 		}

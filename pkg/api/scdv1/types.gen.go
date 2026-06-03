@@ -327,9 +327,9 @@ type ConstraintReference struct {
 	// Opaque version number of this constraint.  Populated only when the ConstraintReference is managed by the USS retrieving or providing it.  Not populated when the ConstraintReference is not managed by the USS retrieving or providing it (instead, the USS must obtain the OVN from the details retrieved from the managing USS).
 	Ovn *EntityOVN `json:"ovn,omitempty"`
 
-	TimeStart Time `json:"time_start"`
+	TimeStart *Time `json:"time_start,omitempty"`
 
-	TimeEnd Time `json:"time_end"`
+	TimeEnd *Time `json:"time_end,omitempty"`
 
 	UssBaseUrl ConstraintUssBaseURL `json:"uss_base_url"`
 }
